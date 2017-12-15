@@ -1,25 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class POI : MonoBehaviour {
 
     [SerializeField]
-    private SpriteRenderer QRCode;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private string Name;
+    [SerializeField]
+    private Vector2 GPSPosition;
+    
+    public int Votes { get; set; }
 
-    public void OnMouseDown()
+    public void SetName(string name)
     {
-        QRCode.gameObject.SetActive(!QRCode.gameObject.activeSelf);
+        this.Name = name;
     }
 
-
+    public void SetGPSPosition(Vector2 gpsPosition)
+    {
+        GPSPosition = gpsPosition;
+        this.transform.position = MapInfo.instance.GetGPSAsUnityPosition(gpsPosition);
+    }
 }

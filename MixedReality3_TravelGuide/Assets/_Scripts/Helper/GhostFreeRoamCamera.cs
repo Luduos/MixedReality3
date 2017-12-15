@@ -28,8 +28,8 @@ public class GhostFreeRoamCamera : MonoBehaviour
     {
         if (cursorToggleAllowed)
         {
-            Screen.lockCursor = true;
-            Cursor.visible = false;
+            //Screen.lockCursor = true;
+            //Cursor.visible = false;
         }
     }
 

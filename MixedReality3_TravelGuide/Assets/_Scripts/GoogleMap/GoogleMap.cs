@@ -71,14 +71,14 @@ public class GoogleMap : MonoBehaviour
             if (centerLocation.address != "")
                 qs += "center=" + WWW.UnEscapeURL(centerLocation.address);
             else
-                qs += "center=" + WWW.UnEscapeURL(string.Format("{0},{1}", centerLocation.latitude, centerLocation.longitude));
+                qs += "center=" + WWW.UnEscapeURL(string.Format("{0},{1}", centerLocation.longitude, centerLocation.latitude));
 
             qs += "&zoom=" + zoom.ToString();
         }
         qs += "&size=" + WWW.UnEscapeURL(string.Format("{0}x{0}", size));
         qs += "&scale=" + (doubleResolution ? "2" : "1");
         // style stuff
-        qs += "&style=feature:poi.attraction%7Celement:labels.text%7Cweight:7.5&style=feature:poi.attraction%7Celement:labels.text.stroke%7Ccolor:0xff8080&style=feature:poi.business%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:transit%7Cvisibility:off";
+        qs += "&style=element:labels%7Cvisibility:off&style=feature:administrative%7Celement:geometry%7Cvisibility:off&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi%7Cvisibility:off&style=feature:road%7Celement:labels.icon%7Cvisibility:off&style=feature:transit%7Cvisibility:off";
         qs += "&maptype=" + mapType.ToString().ToLower();
         var usingSensor = false;
 
@@ -97,7 +97,7 @@ public class GoogleMap : MonoBehaviour
                 if (loc.address != "")
                     qs += "|" + WWW.UnEscapeURL(loc.address);
                 else
-                    qs += "|" + WWW.UnEscapeURL(string.Format("{0},{1}", loc.latitude, loc.longitude));
+                    qs += "|" + WWW.UnEscapeURL(string.Format("{0},{1}", loc.longitude, loc.latitude));
             }
         }
 
@@ -113,7 +113,7 @@ public class GoogleMap : MonoBehaviour
                 if (loc.address != "")
                     qs += "|" + WWW.UnEscapeURL(loc.address);
                 else
-                    qs += "|" + WWW.UnEscapeURL(string.Format("{0},{1}", loc.latitude, loc.longitude));
+                    qs += "|" + WWW.UnEscapeURL(string.Format("{0},{1}", loc.longitude, loc.latitude));
             }
         }
 
@@ -153,8 +153,8 @@ public enum GoogleMapColor
 public class GoogleMapLocation
 {
     public string address;
-    public float latitude;
     public float longitude;
+    public float latitude;
 }
 
 [System.Serializable]
