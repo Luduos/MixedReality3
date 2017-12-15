@@ -504,7 +504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSpeed: 10
   increaseSpeed: 1.25
-  allowMovement: 1
+  allowMovement: 0
   allowRotation: 0
   forwardButton: 57
   backwardButton: 56
