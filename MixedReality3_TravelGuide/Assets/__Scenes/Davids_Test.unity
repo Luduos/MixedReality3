@@ -288,8 +288,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ba1c3b906125d6e4898612ab19eb7244, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: ce3f3ecc11323904eb225a98b7131876, type: 3}
+  m_Color: {r: 0, g: 0.472, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -402,7 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RotationSpeed: 50
-  GPSPosition: {x: 49.25655, y: 7.044347}
+  GPSPosition: {x: 49.2568, y: 7.042048}
   PlayerModel: {fileID: 474272717}
   PointerDistanceToPlayer: 2
   PointerPrefab: {fileID: 114015532972889304, guid: d9cf1c16bf95e314fa6a13a927c44445,
@@ -698,6 +698,12 @@ MonoBehaviour:
     UnityPosition: {x: 0, y: 0}
   - Name: DFKI
     GPSPosition: {x: 49.2568, y: 7.042048}
+    UnityPosition: {x: 0, y: 0}
+  - Name: Leibniz Institute
+    GPSPosition: {x: 49.256786, y: 7.040195}
+    UnityPosition: {x: 0, y: 0}
+  - Name: Catholic Church
+    GPSPosition: {x: 49.255672, y: 7.040352}
     UnityPosition: {x: 0, y: 0}
   POIPrefab: {fileID: 114614108147810292, guid: 3259bc98e3d642f4abe74c20279dddc1,
     type: 2}
