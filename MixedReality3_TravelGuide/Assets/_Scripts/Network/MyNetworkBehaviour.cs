@@ -25,7 +25,7 @@ public class MyNetworkBehaviour : NetworkDiscovery {
             {
                 clientBehaviour.SetClient(currentHost);
             }
-            this.isClient = false;
+            this.StopBroadcast();
             this.StartAsServer();
         }
         
@@ -36,15 +36,11 @@ public class MyNetworkBehaviour : NetworkDiscovery {
         if(currentClient == null)
         {
             NetworkManager.singleton.networkAddress = fromAddress;
-
             currentClient = NetworkManager.singleton.StartClient();
             if(currentClient != null)
             {
                 clientBehaviour.SetClient(currentClient);
-                if (!this.isServer)
-                {
-                    this.enabled = false;
-                }
+
             }
         }
     }

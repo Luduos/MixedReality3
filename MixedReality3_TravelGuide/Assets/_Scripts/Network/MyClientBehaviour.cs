@@ -26,6 +26,14 @@ public class MyClientBehaviour : MonoBehaviour {
         Client = client;
         Client.RegisterHandler(MsgType.Connect, OnConnected);
         Client.RegisterHandler(MyMsgType.POIUpdate, OnPOIUpdate);
+        Client.RegisterHandler(MsgType.Error, OnError);
+
+        DebugText.text = "Was Set";
+
+    }
+
+    public void OnError(NetworkMessage msg)
+    {
     }
 
     public void SendPOIUpdate(int id)
@@ -39,6 +47,7 @@ public class MyClientBehaviour : MonoBehaviour {
     {
         POIUpdateMessage msg = netMsg.ReadMessage<POIUpdateMessage>();
         Debug.Log("ID " + msg.ID);
+        DebugText.text = "ID " + msg.ID;
     }
 
     // Use this for initialization
@@ -53,17 +62,18 @@ public class MyClientBehaviour : MonoBehaviour {
     private void OnConnected(NetworkMessage msg)
     {
         Debug.Log("Connected to Server");
-        DebugText.text = "Jay";
+        DebugText.text = "Connected to Server";
     }
 
     private void OnPlayerConnected(NetworkPlayer player)
     {
         Debug.Log("Player connected to Server");
-
+        
     }
 
     private void OnFailedToConnect(NetworkConnectionError error)
     {
         Debug.Log("Network Connection Error");
+        DebugText.text = "Network Connection Error";
     }
 }
