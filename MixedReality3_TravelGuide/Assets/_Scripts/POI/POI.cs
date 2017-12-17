@@ -44,6 +44,7 @@ public class POI : MonoBehaviour {
         float angleDiff = Mathf.DeltaAngle(angleA, angleB);
 
         NameText.transform.RotateAround(this.transform.position, -Vector3.forward, angleDiff);
+        this.transform.position = MapInfo.instance.GetGPSAsUnityPosition(GPSPosition);
     }
 
     public void SetGPSPosition(Vector2 gpsPosition)

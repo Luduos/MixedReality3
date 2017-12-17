@@ -48,12 +48,16 @@ public class GoogleMap : MonoBehaviour
 
     void Start()
     {
+        
         if (loadOnStart)
             Refresh();
     }
 
+
+
     public void Refresh()
     {
+
         if (autoLocateCenter && (markers.Length == 0 && paths.Length == 0))
         {
             Debug.LogError("Auto Center will only work if paths or markers are used.");

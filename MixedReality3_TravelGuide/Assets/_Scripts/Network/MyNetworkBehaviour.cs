@@ -4,9 +4,6 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(MyClientBehaviour))]
 public class MyNetworkBehaviour : NetworkDiscovery {
 
-    private NetworkClient currentHost;
-    private NetworkClient currentClient;
-
     private MyClientBehaviour clientBehaviour;
 
     private void Start()
@@ -14,16 +11,24 @@ public class MyNetworkBehaviour : NetworkDiscovery {
         clientBehaviour = this.gameObject.GetComponent<MyClientBehaviour>();
         this.Initialize();
         this.StartAsClient();
+
     }
 
     public void OnServeAsHost()
     {
-        if(null == currentHost)
+        if(null != clientBehaviour.Client)
         {
-            currentHost = NetworkManager.singleton.StartHost();
-            if(currentHost != null)
+            clientBehaviour.Client.Shutdown();
+            clientBehaviour.Client = null;
+            NetworkServer.Shutdown();
+        }
+        if(null == clientBehaviour.Client)
+        {
+            clientBehaviour.Client = NetworkManager.singleton.StartHost();
+            if (clientBehaviour.Client != null)
             {
-                clientBehaviour.SetClient(currentHost);
+                clientBehaviour.SetClient(clientBehaviour.Client, true);
+
             }
             this.StopBroadcast();
             this.StartAsServer();
@@ -33,14 +38,13 @@ public class MyNetworkBehaviour : NetworkDiscovery {
 
     public override void OnReceivedBroadcast(string fromAddress, string data)
     {
-        if(currentClient == null)
+        if(clientBehaviour.Client == null)
         {
             NetworkManager.singleton.networkAddress = fromAddress;
-            currentClient = NetworkManager.singleton.StartClient();
-            if(currentClient != null)
+            clientBehaviour.Client = NetworkManager.singleton.StartClient();
+            if (clientBehaviour.Client != null)
             {
-                clientBehaviour.SetClient(currentClient);
-
+                clientBehaviour.SetClient(clientBehaviour.Client, false);
             }
         }
     }

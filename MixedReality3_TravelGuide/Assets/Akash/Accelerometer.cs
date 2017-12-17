@@ -21,7 +21,7 @@ public class Accelerometer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		if (bounds) {
+		if (bounds) { 
 
 			transform.position = new Vector3 (transform.position.x, Mathf.Clamp (transform.position.y, maxZoomIn,maxZoomOut), transform.position.z);
 		

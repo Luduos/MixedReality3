@@ -1,19 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GPS : MonoBehaviour {
 
 	public static GPS Instance{ set; get; }
 
-
+    public UnityAction OnInitialized;
 
 	public float lat,lon;
 	public bool isUnityRemote=true;
 
-	void Start()
+    GPS()
+    {
+        Instance = this;
+    }
+
+    void Start()
 	{
-		Instance = this;
 		DontDestroyOnLoad (gameObject);
 		StartCoroutine(StartLocationService());
 	}
@@ -52,6 +57,11 @@ public class GPS : MonoBehaviour {
 
 		lat = Input.location.lastData.latitude;
 		lon = Input.location.lastData.longitude;
+
+        if(null != OnInitialized)
+        {
+            OnInitialized.Invoke();
+        }
 
 		yield break;
 
