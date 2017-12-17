@@ -38,6 +38,7 @@ public class MapInfo : MonoBehaviour {
             poi.SetName(PointsOfInterest[i].Name);
             poi.SetGPSPosition(PointsOfInterest[i].GPSPosition);
             PointsOfInterest[i].UnityPosition = GetGPSAsUnityPosition(PointsOfInterest[i].GPSPosition);
+            PointsOfInterest[i].ID = poi.ID;
         }
         if (null != OnFinishedInit)
             OnFinishedInit.Invoke();
@@ -93,6 +94,7 @@ public class MapInfo : MonoBehaviour {
 [System.Serializable]
 public struct POIInfo
 {
+    public int ID;
     public string Name;
     public Vector2 GPSPosition;
     public Vector2 UnityPosition;

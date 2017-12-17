@@ -30,6 +30,23 @@ public class Player : MonoBehaviour {
             PlayerModel.transform.rotation = PlayerModel.transform.rotation * Quaternion.AngleAxis(Time.deltaTime * RotationSpeed * horizontalInput, -Vector3.forward);
             SetLookAt(PlayerModel.transform.up);
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            int selected = OnVote();
+            Debug.Log(selected);
+        }
+    }
+
+    public int OnVote()
+    {
+        foreach(POIPointer p in pointers)
+        {
+            if (p.IsActive)
+            {
+                return p.ID;
+            }
+        }
+        return -1;
     }
 
 
@@ -60,9 +77,12 @@ public class Player : MonoBehaviour {
             POIPointer pointer = Instantiate(PointerPrefab);
             pointer.transform.SetParent(this.transform, false);
 
+            pointer.POIName = poi.Name;
             pointer.UnityTarget = poi.UnityPosition;
             pointer.OnPlayerPositionChanged(CurrentPos);
+            pointer.ID = poi.ID;
             pointers.Add(pointer);
+
         }
     }
 
