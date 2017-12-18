@@ -405,8 +405,9 @@ MonoBehaviour:
   RotationThreshold: 1
   DebugText: {fileID: 727148488}
   GPSPosition: {x: 49.2568, y: 7.042048}
-  ZoomSpeed: 1
+  ZoomSpeed: 15
   PlayerModel: {fileID: 474272717}
+  PlayerSprite: {fileID: 474272719}
   PointerPrefab: {fileID: 114015532972889304, guid: d9cf1c16bf95e314fa6a13a927c44445,
     type: 2}
   clientBehaviour: {fileID: 1127199561}
@@ -820,7 +821,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2069,8 +2070,8 @@ MonoBehaviour:
     UnityPosition: {x: 0, y: 0}
     poiObject: {fileID: 0}
   - ID: 0
-    Name: Catholic Church
-    GPSPosition: {x: 49.255672, y: 7.040352}
+    Name: Technichal Biochemics
+    GPSPosition: {x: 49.255264, y: 7.042913}
     UnityPosition: {x: 0, y: 0}
     poiObject: {fileID: 0}
   POIPrefab: {fileID: 114614108147810292, guid: 3259bc98e3d642f4abe74c20279dddc1,

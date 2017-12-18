@@ -13,8 +13,8 @@ public class MyClientBehaviour : MonoBehaviour {
     [SerializeField]
     private Player PlayerComp;
 
-
-    public bool IsHost { get; set; }
+    private bool isHost;
+    public bool IsHost { get { return isHost; } set { isHost = value; PlayerComp.ShowPOIVoteCounters(value); } }
 
     public NetworkClient Client;
 
@@ -52,6 +52,7 @@ public class MyClientBehaviour : MonoBehaviour {
         Client.RegisterHandler(MsgType.Disconnect, OnDisconnect);
         Client.RegisterHandler(MyMsgType.StartVote, OnStartVoting);
         Client.RegisterHandler(MyMsgType.StopVote, OnStopVoting);
+
 
         Client.RegisterHandler(MyMsgType.POIUpdate, OnPOIUpdate);
         if (IsHost)

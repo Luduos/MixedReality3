@@ -16,7 +16,7 @@ public class MyNetworkBehaviour : NetworkDiscovery {
 
     public void OnServeAsHost()
     {
-        if(null == clientBehaviour.Client)
+        if (null == clientBehaviour.Client)
         {
             clientBehaviour.Client = NetworkManager.singleton.StartHost();
             if (clientBehaviour.Client != null)
@@ -25,7 +25,28 @@ public class MyNetworkBehaviour : NetworkDiscovery {
 
             }
             this.StopBroadcast();
+            this.Initialize();
             this.StartAsServer();
+        }
+        else
+        {
+            if (!clientBehaviour.Client.isConnected)
+            {
+                NetworkManager.singleton.StartServer();
+                clientBehaviour.IsHost = true;
+                this.StopBroadcast();
+                this.Initialize();
+                this.StartAsServer();
+            }
+            else if (clientBehaviour.IsHost)
+            {
+                NetworkServer.Shutdown();
+                clientBehaviour.IsHost = false;
+                clientBehaviour.Client.Disconnect();
+                this.StopBroadcast();
+                this.Initialize();
+                this.StartAsClient();
+            }
         }
         
     }
@@ -39,6 +60,13 @@ public class MyNetworkBehaviour : NetworkDiscovery {
             if (clientBehaviour.Client != null)
             {
                 clientBehaviour.SetClient(clientBehaviour.Client, false);
+            }
+        }
+        else
+        {
+            if (!clientBehaviour.Client.isConnected)
+            {
+                clientBehaviour.Client.ReconnectToNewHost(fromAddress, NetworkManager.singleton.networkPort);
             }
         }
     }
