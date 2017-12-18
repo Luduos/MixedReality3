@@ -52,6 +52,11 @@ public class POIPointer : MonoBehaviour {
         }     
     }
 
+    public void ShowVoteCounters(bool shouldShow)
+    {
+        VoteCounter.gameObject.SetActive(shouldShow);
+    }
+
     public void OnPlayerRotationChanged(Vector2 forward)
     {
         float dotForwardTarget = Vector2.Dot(this.transform.up, forward);
@@ -67,6 +72,12 @@ public class POIPointer : MonoBehaviour {
             NormalSprite.gameObject.SetActive(true);
             IsActive = false;
         }
+    }
+
+    public void OnMarkSelected()
+    {
+        NormalSprite.color = Color.red;
+        BigSprite.color = Color.red;
     }
 
     public void OnMakeTarget()

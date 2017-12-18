@@ -16,13 +16,14 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     private float ZoomSpeed = 1.0f;
-    [SerializeField]
-    private Button ZoomButton;
 
     public Vector2 GetGPSPosition { get { return GPSPosition; }  set{ GPSPosition = value; } }
 
     [SerializeField]
     private GameObject PlayerModel;
+
+    [SerializeField]
+    private SpriteRenderer PlayerSprite;
 
     [SerializeField]
     private POIPointer PointerPrefab;
@@ -34,16 +35,20 @@ public class Player : MonoBehaviour {
 
 
     public bool IsVotingTime { get; set; }
+    public bool IsZooming { get; set; }
+
+    private Camera MainCamera;
 
     private void Start()
     {
+        MainCamera = Camera.main;
         this.transform.position = MapInfo.instance.GetGPSAsUnityPosition(GPSPosition) ;
         this.transform.position += new Vector3(0.0f, 0.0f, -0.1f);
 
         Input.gyro.updateInterval = 0.03f;
         Input.gyro.enabled = true;
 
-
+        
     }
 
     private void Update()
@@ -57,20 +62,12 @@ public class Player : MonoBehaviour {
 
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            /*
-             
-            Quaternion gyroXYRotation = new Quaternion(0.0f, 0.0f, -Input.gyro.attitude.z, 0.0f);
-            Quaternion newRotation = Quaternion.RotateTowards(PlayerModel.transform.rotation, gyroXYRotation, Time.deltaTime * RotationSpeed);
-            Vector3 euler = newRotation.eulerAngles;
-            if(euler.z > RotationThreshold)
-            {
-                PlayerModel.transform.rotation =  newRotation;
-            }
-            */
-            //PlayerModel.transform.Rotate(0, 0, Input.gyro.rotationRateUnbiased.z);
             PlayerModel.transform.rotation = new Quaternion(0.0f, 0.0f, -Input.gyro.attitude.z, -Input.gyro.attitude.w);
             SetLookAt(PlayerModel.transform.up);
+
         }
+
+        
 
         float verticalInput = Input.GetAxis("Vertical");
         if(verticalInput != 0)
@@ -87,7 +84,7 @@ public class Player : MonoBehaviour {
             }
             Debug.Log(selected);
         }
-        if(IsVotingTime && (Mathf.Abs(Input.gyro.userAcceleration.y) > 0.4f))
+        else if(IsVotingTime && (Mathf.Abs(Input.gyro.userAcceleration.y) > 0.4f))
         {
             //DebugText.text = "Voted: " + Mathf.Abs(Input.gyro.userAcceleration.y);
             int selected = OnInputVote();
@@ -97,6 +94,19 @@ public class Player : MonoBehaviour {
                 clientBehaviour.SendPOIVote(selected);
             }
             Debug.Log(selected);
+        }
+        if (IsZooming)
+        {
+            MainCamera.orthographicSize = MainCamera.orthographicSize - Input.acceleration.y * Time.deltaTime * ZoomSpeed;
+        }
+
+        if(IsZooming && Input.GetKey(KeyCode.Q))
+        {
+            MainCamera.orthographicSize = MainCamera.orthographicSize - 1.0f * Time.deltaTime * ZoomSpeed;
+        }
+        if (IsZooming && Input.GetKey(KeyCode.E))
+        {
+            MainCamera.orthographicSize = MainCamera.orthographicSize + 1.0f * Time.deltaTime * ZoomSpeed;
         }
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -111,6 +121,7 @@ public class Player : MonoBehaviour {
         IsVotingTime = true;
         Handheld.Vibrate();
         ResetVotes();
+        PlayerSprite.color = Color.red;
     }
 
     private void ResetVotes()
@@ -118,14 +129,26 @@ public class Player : MonoBehaviour {
         foreach (POIPointer p in pointers)
         {
             p.VoteCount = 0;
+            p.OnMakeNormal();
         }
     }
 
-    public void StopVoting(int winnerID)
+    public void StopVoting(int winnerID, bool shouldDisplayWinner)
     {
         IsVotingTime = false;
         Handheld.Vibrate();
-        SetWinner(winnerID);
+        if (shouldDisplayWinner)
+        {
+            SetWinner(winnerID);
+        }
+        else
+        {
+            foreach (POIPointer p in pointers)
+            {
+                p.OnMakeNormal();
+            }
+        }
+        PlayerSprite.color = new Color(0.0f, 0.5f, 1.0f, 1.0f);
     }
 
     /// <summary>
@@ -175,10 +198,19 @@ public class Player : MonoBehaviour {
             if (p.IsActive)
             {
                 IsVotingTime = false;
+                p.OnMarkSelected();
                 return p.ID;
             }
         }
         return -1;
+    }
+
+    public void ShowPOIVoteCounters(bool shouldShow)
+    {
+        foreach (POIPointer p in pointers)
+        {
+            p.ShowVoteCounters(shouldShow);
+        }
     }
 
     public int OnIncreaseVoteCounter(int ID)
@@ -247,6 +279,7 @@ public class Player : MonoBehaviour {
 
         }
         MapInfo.instance.RefreshMapCenter();
+        ShowPOIVoteCounters(false);
     }
 
 }

@@ -57,6 +57,11 @@ public class MyClientBehaviour : MonoBehaviour {
         if (IsHost)
         {
             NetworkServer.RegisterHandler(MyMsgType.POIVote, OnPOIVote);
+            PlayerComp.ShowPOIVoteCounters(true);
+        }
+        else
+        {
+            PlayerComp.ShowPOIVoteCounters(false);
         }
 
         Debug.Log(Client.isConnected);
@@ -101,7 +106,18 @@ public class MyClientBehaviour : MonoBehaviour {
     {
         Debug.Log("Voting time over");
         StopVoteMessage msg = netMsg.ReadMessage<StopVoteMessage>();
-        PlayerComp.StopVoting(msg.WinnerID);
+
+        // I know I could have written "PlayerComp.StopVoting(msg.WinnerID, IsHost);" but this version
+        // is a lot better readable by a human
+        if (IsHost)
+        {
+            PlayerComp.StopVoting(msg.WinnerID, true);
+        }
+        else
+        {
+            PlayerComp.StopVoting(msg.WinnerID, false);
+        }
+
     }
 
     public void SendPOIVote(int ID)
@@ -123,15 +139,16 @@ public class MyClientBehaviour : MonoBehaviour {
     }
 
     /// <summary>
-    /// Update for Client
+    /// Update for Host
     /// </summary>
     /// <param name="netMsg"></param>
     private void OnPOIUpdate(NetworkMessage netMsg)
     {
-        // TODO: Update new Count
-        POIUpdateMessage msg = netMsg.ReadMessage<POIUpdateMessage>();
-        Debug.Log("ID " + msg.ID + " Count: " + msg.Count);
-        PlayerComp.OnSetVoteCounter(msg.ID, msg.Count);
+
+            POIUpdateMessage msg = netMsg.ReadMessage<POIUpdateMessage>();
+            Debug.Log("ID " + msg.ID + " Count: " + msg.Count);
+            PlayerComp.OnSetVoteCounter(msg.ID, msg.Count);
+
     }
 
     /// <summary>

@@ -16,12 +16,6 @@ public class MyNetworkBehaviour : NetworkDiscovery {
 
     public void OnServeAsHost()
     {
-        if(null != clientBehaviour.Client)
-        {
-            clientBehaviour.Client.Shutdown();
-            clientBehaviour.Client = null;
-            NetworkServer.Shutdown();
-        }
         if(null == clientBehaviour.Client)
         {
             clientBehaviour.Client = NetworkManager.singleton.StartHost();
