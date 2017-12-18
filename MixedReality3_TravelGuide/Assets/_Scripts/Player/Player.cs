@@ -14,6 +14,11 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private Vector2 GPSPosition;
 
+    [SerializeField]
+    private float ZoomSpeed = 1.0f;
+    [SerializeField]
+    private Button ZoomButton;
+
     public Vector2 GetGPSPosition { get { return GPSPosition; }  set{ GPSPosition = value; } }
 
     [SerializeField]
@@ -37,6 +42,8 @@ public class Player : MonoBehaviour {
 
         Input.gyro.updateInterval = 0.03f;
         Input.gyro.enabled = true;
+
+
     }
 
     private void Update()
@@ -50,14 +57,18 @@ public class Player : MonoBehaviour {
 
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            Quaternion gyroXYRotation = new Quaternion(0.0f, 0.0f, -Input.gyro.attitude.z, -Input.gyro.attitude.w);
+            /*
+             
+            Quaternion gyroXYRotation = new Quaternion(0.0f, 0.0f, -Input.gyro.attitude.z, 0.0f);
             Quaternion newRotation = Quaternion.RotateTowards(PlayerModel.transform.rotation, gyroXYRotation, Time.deltaTime * RotationSpeed);
             Vector3 euler = newRotation.eulerAngles;
             if(euler.z > RotationThreshold)
             {
                 PlayerModel.transform.rotation =  newRotation;
             }
-            
+            */
+            //PlayerModel.transform.Rotate(0, 0, Input.gyro.rotationRateUnbiased.z);
+            PlayerModel.transform.rotation = new Quaternion(0.0f, 0.0f, -Input.gyro.attitude.z, -Input.gyro.attitude.w);
             SetLookAt(PlayerModel.transform.up);
         }
 
